@@ -1,0 +1,18 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.svofficials9999_collab.mathmemory",
+      "sha256_cert_fingerprints": ["1E:F9:9B:D0:BF:CF:EB:1A:22:AA:2E:44:71:E4:46:32:26:4C:71:99:CD:34:70:2F:74:B3:10:66:95:33:4C:B6"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.svofficials9999_collab.upiqr",
+      "sha256_cert_fingerprints": ["36:34:29:73:05:39:A1:36:1C:00:F4:E9:CB:6E:01:AE:B0:DD:3C:79:2A:DB:E2:C5:BE:30:42:02:5B:04:15:C4"]
+    }
+  }
+]
