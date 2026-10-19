@@ -1,0 +1,37 @@
+{
+  "id": "./poster-maker.html",
+  "name": "SV PRIME EDITS",
+  "short_name": "SV PRIME EDITS",
+  "start_url": "./poster-maker.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#06070a",
+  "theme_color": "#06070a",
+  "description": "Posters, banners and videos with live previews and WhatsApp order requests",
+  "icons": [
+    {
+      "src": "poster-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "poster-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "poster-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "poster-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
