@@ -293,7 +293,7 @@ go.onclick=function(){
  hash(pv,salt).then(function(h){
   if(saved&&(saved.mobile!==nv||saved.hash!==h)){saved.fails=(saved.fails||0)+1;if(saved.fails>=5){saved.until=Date.now()+60000;saved.fails=0}s(PK,JSON.stringify(saved));p.value='';say('నంబర్ లేదా PIN తప్పు','Wrong mobile number or PIN');go.disabled=false;return}
   if(isNew){s(PK,JSON.stringify({mobile:nv,salt:salt,hash:h,fails:0,name:nm}))}else if(!saved.name){saved.name=nm;s(PK,JSON.stringify(saved))}
-  queue(nv,nm);flush();done();offerFp();
+  try{if(!localStorage.getItem('sv.login.v1'))localStorage.setItem('sv.login.v1',JSON.stringify({name:nm,phone:nv}))}catch(e){}queue(nv,nm);flush();done();offerFp();
  },function(){say('ఈ బ్రౌజర్‌లో కుదరలేదు','Not supported in this browser');go.disabled=false});
 };
 d.addEventListener('keydown',function(e){if(box&&box.isConnected&&e.key==='Enter')go.click()});
