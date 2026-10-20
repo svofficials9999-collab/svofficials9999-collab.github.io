@@ -48,5 +48,5 @@
     if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
   }
   var s = stored();
-  if (s) { log(s.name, s.phone); } else { show(); }
+  if (s) { try { var k2 = 'svl.logged.' + APP; if (!sessionStorage.getItem(k2)) { sessionStorage.setItem(k2, '1'); log(s.name, s.phone); } } catch (e) { log(s.name, s.phone); } } else { show(); }
 })();
