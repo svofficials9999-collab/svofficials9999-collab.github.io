@@ -249,11 +249,11 @@ body .tbtn[aria-checked=true] i{box-shadow:0 0 0 3px #050507,0 0 0 5px var(--c),
 <body><script>(function(){
 if(location.protocol==='file:')return;
 var FORM='https://docs.google.com/forms/d/e/1FAIpQLSc-sHgfqyIoc0CO7Gs59REQvPkzhOgYNIV1ZzvNXxsYOQQeEg/formResponse',ENT='entry.1331175987',ENM='entry.4334491';
-var PK='svpe.lock.v1',FK='svpe.fp.v1',QK='svpe.q.v2',SK='svpe.ok',ls=window.localStorage,ss=window.sessionStorage;
+var PK='svpe.lock.v1',FK='svpe.fp.v1',QK='svpe.q.v2',SK='svpe.ok',LK='svpe.ok.v1',LG='svpe.logged.v1',ls=window.localStorage,ss=window.sessionStorage;
 function g(k){try{return ls.getItem(k)}catch(e){return null}}
 function s(k,v){try{ls.setItem(k,v)}catch(e){}}
 function j(k){try{return JSON.parse(g(k)||'null')}catch(e){return null}}
-try{if(ss.getItem(SK)==='1')return}catch(e){}
+try{if(ss.getItem(SK)==='1')return;var _lk=j(LK),_pk=j(PK);if(_lk&&_pk&&_lk.mobile===_pk.mobile){try{ss.setItem(SK,'1')}catch(e){}return}}catch(e){}
 var qb=false;
 function qget(){return j(QK)||[]}
 function qset(a){s(QK,JSON.stringify(a.slice(-20)))}
@@ -272,8 +272,8 @@ function hash(pin,salt){return crypto.subtle.importKey('raw',new TextEncoder().e
 function fpOK(){try{return !!(window.isSecureContext&&window.PublicKeyCredential&&navigator.credentials&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable)}catch(e){return false}}
 var box,saved=j(PK),isNew=!saved,needName=isNew||!saved.name;
 function te(a,b){return a+' · '+b}
-function done(){try{ss.setItem(SK,'1')}catch(e){}d.documentElement.classList.remove('svl');if(box)box.remove();st.remove()}
-function sendSaved(){var p=j(PK);if(p&&p.mobile){queue(p.mobile,p.name);flush()}}
+function done(){try{ss.setItem(SK,'1')}catch(e){}try{var _dp=j(PK);if(_dp&&_dp.mobile)s(LK,JSON.stringify({mobile:_dp.mobile,name:_dp.name||''}))}catch(e){}d.documentElement.classList.remove('svl');if(box)box.remove();st.remove()}
+function sendSaved(){var p=j(PK);if(p&&p.mobile&&g(LG)!==p.mobile){s(LG,p.mobile);queue(p.mobile,p.name);flush()}}
 function build(){
 box=d.createElement('div');box.id='svl';
 box.innerHTML='<div class="c"><img alt="SV PRIME EDITS logo" style="width:88px;height:auto;display:block;margin:0 auto 8px" src="'+(d.querySelector('link[rel=apple-touch-icon]')||{href:''}).href+'"><h1>SV PRIME EDITS</h1><p class="sub">'+te('పోస్టర్ మేకర్','Poster Maker')+'</p><p><b>'+(isNew?te('పేరు, మొబైల్ నంబర్ + 6 అంకెల PIN ఇవ్వండి','Enter your name, mobile number + 6-digit PIN'):te('మొబైల్ + PIN తో తెరవండి','Open with your mobile + PIN'))+'</b></p>'+(needName?'<label for="svl-nm">'+te('మీ పేరు *','Your name *')+'</label><input id="svl-nm" type="text" maxlength="60" autocomplete="name" aria-label="Your name">':'')+'<label for="svl-n">'+te('మొబైల్ నంబర్ (10 అంకెలు)','Mobile number (10 digits)')+'</label><input id="svl-n" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" aria-label="Mobile number"><label for="svl-p">'+(isNew?te('కొత్త PIN','New PIN'):te('మీ PIN','Your PIN'))+'</label><input id="svl-p" type="password" inputmode="numeric" maxlength="6" autocomplete="'+(isNew?'new-password':'current-password')+'" aria-label="6 digit PIN">'+(isNew?'<label for="svl-c">'+te('PIN మళ్లీ','Confirm PIN')+'</label><input id="svl-c" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" aria-label="Confirm PIN">':'')+'<p class="msg" id="svl-m" role="status" aria-live="polite"></p><button id="svl-go">'+(isNew?te('నమోదు చేసి తెరువు','Register and open'):te('అన్‌లాక్','Unlock'))+'</button><button class="fp" id="svl-fp" hidden>'+te('ఫింగర్‌ప్రింట్ / ఫోన్ అన్‌లాక్','Fingerprint / phone unlock')+'</button><div class="mini">Your mobile number is used only to contact you about SV PRIME EDITS.</div></div>';
@@ -293,7 +293,7 @@ go.onclick=function(){
  hash(pv,salt).then(function(h){
   if(saved&&(saved.mobile!==nv||saved.hash!==h)){saved.fails=(saved.fails||0)+1;if(saved.fails>=5){saved.until=Date.now()+60000;saved.fails=0}s(PK,JSON.stringify(saved));p.value='';say('నంబర్ లేదా PIN తప్పు','Wrong mobile number or PIN');go.disabled=false;return}
   if(isNew){s(PK,JSON.stringify({mobile:nv,salt:salt,hash:h,fails:0,name:nm}))}else if(!saved.name){saved.name=nm;s(PK,JSON.stringify(saved))}
-  try{if(!localStorage.getItem('sv.login.v1'))localStorage.setItem('sv.login.v1',JSON.stringify({name:nm,phone:nv}))}catch(e){}queue(nv,nm);flush();done();offerFp();
+  try{if(!localStorage.getItem('sv.login.v1'))localStorage.setItem('sv.login.v1',JSON.stringify({name:nm,phone:nv}))}catch(e){}if(g(LG)!==nv){s(LG,nv);queue(nv,nm);flush()}done();offerFp();
  },function(){say('ఈ బ్రౌజర్‌లో కుదరలేదు','Not supported in this browser');go.disabled=false});
 };
 d.addEventListener('keydown',function(e){if(box&&box.isConnected&&e.key==='Enter')go.click()});
