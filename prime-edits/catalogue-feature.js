@@ -68,3 +68,28 @@ const ms=$('search');if(ms)ms.addEventListener('input',()=>{const q=norm(ms.valu
 })();
 
 });
+
+/* SVPE UPI fallback: keep app-opening, add exact manual details if the bank/app declines the UPI intent. */
+document.addEventListener('DOMContentLoaded',function(){
+function svpeCopyText(text){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(text);return new Promise(function(res,rej){try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');ta.remove();res()}catch(e){rej(e)}})}
+var oldShowThanks=window.showThanks;
+if(typeof oldShowThanks!=='function')return;
+window.showThanks=function(){
+ oldShowThanks.apply(this,arguments);
+ try{
+  var i=chosen,link=(typeof window.svpeUpiLink==='function')?window.svpeUpiLink(i):null;
+  var pq=document.getElementById('payQr'),ap=document.getElementById('payApp'),pe=document.getElementById('payExact'),cp=document.getElementById('payCopy');
+  if(!styles[i]||!link){if(cp)cp.style.display='none';return;}
+  var pa='9177226638-3@ybl',note='SVPE '+styles[i].id;
+  try{var u=new URL(link);pa=u.searchParams.get('pa')||pa;note=u.searchParams.get('tn')||note;}catch(e){}
+  var manual='UPI ID: '+pa+'\nAmount: '+styles[i].price+'\nNote: '+note+'\nMobile: 91772 26638';
+  if(pq)pq.alt='UPI payment QR - Dappu Srinivas - '+styles[i].price;
+  if(ap){ap.textContent=(lang==='te'?'UPI యాప్ ఓపెన్ చేయండి (అనుమతిస్తే)':'Open UPI app (if allowed)');ap.setAttribute('rel','noopener noreferrer');}
+  var step=document.querySelector('#thanks .paysteps li');
+  if(step)step.textContent=(lang==='te'?'1. ఈ QR ని మరో ఫోన్‌తో స్కాన్ చేయండి, లేదా save/screenshot చేసి మీ UPI యాప్ Scan QR ఆప్షన్‌లో upload చేయండి. యాప్ ఓపెన్ decline అయితే కింది UPI వివరాలు కాపీ చేసి manually pay చేయండి.':'1. Scan this QR from another phone, or save/screenshot it and upload it in your UPI app Scan QR option. If app-opening is declined, copy the UPI details below and pay manually.');
+  if(!cp&&ap){cp=document.createElement('button');cp.id='payCopy';cp.type='button';cp.className='payapp';ap.parentNode.insertBefore(cp,ap.nextSibling);}
+  if(cp){cp.style.display='';cp.textContent=(lang==='te'?'UPI వివరాలు కాపీ చేయండి':'Copy UPI ID + payment details');cp.onclick=function(){svpeCopyText(manual).then(function(){cp.textContent=(lang==='te'?'కాపీ అయింది':'Copied')})};}
+  if(pe)pe.innerHTML=(lang==='te'?'చెల్లించాల్సిన మొత్తం: ':'Pay exactly: ')+styles[i].price+'<br><small>UPI ID: '+pa+'<br>Note: '+note+'<br>Mobile: 91772 26638</small>';
+ }catch(e){}
+};
+});
